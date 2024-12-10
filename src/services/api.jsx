@@ -1,78 +1,79 @@
-import axios from 'axios';
+import axios from "axios";
 
-const BASE_URL = 'http://localhost:8080/AuctionEase';
-const AUCTIONS_URL = `${BASE_URL}/auctions`;
-const BIDS_URL = `${BASE_URL}/Auctions/bids`;
+// Base URL of the backend
+const BASE_URL = "http://localhost:8080/AuctionEase";
 
-// Auction-related functions
+// API instance
+const api = axios.create({
+  baseURL: BASE_URL,
+});
+
+// Auction API
 export const fetchAuctions = async () => {
-  const response = await axios.get(AUCTIONS_URL);
+  const response = await api.get("/auctions");
   return response.data;
 };
 
 export const fetchAuctionById = async (id) => {
-  const response = await axios.get(`${AUCTIONS_URL}/${id}`);
+  const response = await api.get(`/auctions/${id}`);
   return response.data;
 };
 
 export const createAuction = async (auctionData) => {
-  const response = await axios.post(AUCTIONS_URL, auctionData);
+  const response = await api.post("/auctions", auctionData);
   return response.data;
 };
 
-export const updateAuction = async (id, auctionData) => {
-  const response = await axios.put(`${AUCTIONS_URL}/${id}`, auctionData);
+export const updateAuction = async (id, updatedData) => {
+  const response = await api.put(`/auctions/${id}`, updatedData);
   return response.data;
 };
 
 export const deleteAuction = async (id) => {
-  await axios.delete(`${AUCTIONS_URL}/${id}`);
-};
-
-// Bid-related functions
-export const addBid = async (bidData) => {
-  const response = await axios.post(BIDS_URL, bidData);
+  const response = await api.delete(`/auctions/${id}`);
   return response.data;
 };
 
-export const fetchBidsByAuction = async (auctionId) => {
-  const response = await axios.get(`${BIDS_URL}/auction/${auctionId}`);
+// User API
+export const signupUser = async (userData) => {
+  const response = await api.post("/auctionusers", userData);
   return response.data;
 };
 
-export const fetchHighestBid = async (auctionId) => {
-  const response = await axios.get(`${BIDS_URL}/auction/${auctionId}/highest`);
-  return response.data;
-};
-
-// User-related functions
 export const fetchUsers = async () => {
-  const response = await axios.get(`${BASE_URL}/auctionusers`);
+  const response = await api.get("/auctionusers");
   return response.data;
 };
 
 export const fetchUserByUsername = async (username) => {
-  const response = await axios.get(`${BASE_URL}/auctionusers/${username}`);
+  const response = await api.get(`/auctionusers/${username}`);
   return response.data;
 };
 
-export const signupUser = async (userData) => {
-  const response = await axios.post(`${BASE_URL}/auctionusers`, userData);
-  return response.data;
-};
-
-export const updateUser = async (id, userData) => {
-  const response = await axios.put(`${BASE_URL}/auctionusers/${id}`, userData);
+export const updateUser = async (id, updatedData) => {
+  const response = await api.put(`/auctionusers/${id}`, updatedData);
   return response.data;
 };
 
 export const deleteUser = async (username) => {
-  await axios.delete(`${BASE_URL}/auctionusers/${username}`);
+  const response = await api.delete(`/auctionusers/${username}`);
+  return response.data;
 };
 
-export default axios.create({
-  baseURL: BASE_URL,
-  headers: {
-    'Content-Type': 'application/json'
-  }
-});
+// Bid API
+export const addBid = async (bidData) => {
+  const response = await api.post("/bids", bidData);
+  return response.data;
+};
+
+export const fetchBidsByAuction = async (auctionId) => {
+  const response = await api.get(`/bids/auction/${auctionId}`);
+  return response.data;
+};
+
+export const fetchHighestBid = async (auctionId) => {
+  const response = await api.get(`/bids/auction/${auctionId}/highest`);
+  return response.data;
+};
+
+export default api;
