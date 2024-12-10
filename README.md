@@ -1,2 +1,0 @@
-# fullstackproject
-CAMPUS MART 

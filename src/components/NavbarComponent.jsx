@@ -1,43 +1,34 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
-import aucLogo from "../assets/auc.webp";
 
-const NavbarComponent = () => {
+const NavbarComponent = ({ loggedIn, setLoggedIn }) => {
   const navigate = useNavigate();
 
+  const handleLogout = () => {
+    setLoggedIn(false);
+    localStorage.removeItem('user');
+    navigate('/login');
+  };
+
   return (
-    <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
-      <div className="container-fluid">
-        <Link className="navbar-brand" to="/">
-          <img src={aucLogo} alt="AuctionEase" className="logo" />
-        </Link>
-        <button
-          className="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarNav"
-        >
-          <span className="navbar-toggler-icon"></span>
-        </button>
-        <div className="collapse navbar-collapse" id="navbarNav">
-          <ul className="navbar-nav ms-auto">
-            <li className="nav-item">
-              <Link className="nav-link" to="/">
-                Auctions
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link className="nav-link" to="/add-auction">
-                Add Auction
-              </Link>
-            </li>
-            <li className="nav-item">
-              <button className="btn btn-danger" onClick={() => navigate("/login")}>
-                Logout
-              </button>
-            </li>
-          </ul>
-        </div>
+    <nav className="navbar">
+      <div className="navbar-brand">
+        <Link to="/">AuctionEase</Link>
+      </div>
+      <div className="navbar-links">
+        {loggedIn ? (
+          <>
+            <Link to="/add-auction">Add Auction</Link>
+            <button onClick={handleLogout} className="logout-btn">
+              Logout
+            </button>
+          </>
+        ) : (
+          <>
+            <Link to="/login">Login</Link>
+            <Link to="/signup">Signup</Link>
+          </>
+        )}
       </div>
     </nav>
   );
