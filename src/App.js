@@ -11,6 +11,8 @@ import AddAuction from "./pages/AddAuction";
 import UpdateAuction from "./pages/UpdateAuction";
 import BidPage from "./pages/BidPage"; // Add this import
 
+import './styles/style.css';
+
 const App = () => {
   const [loggedIn, setLoggedIn] = useState(false);
   const [userRole, setUserRole] = useState(null);

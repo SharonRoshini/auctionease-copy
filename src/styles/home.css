@@ -51,6 +51,54 @@
   background-color: #2980b9;
   transform: translateY(-2px);
 }
+.home-container {
+  max-width: 1200px;
+  margin: 40px auto;
+  padding: 0 20px;
+  text-align: center;
+}
+
+h1 {
+  font-size: 3rem;
+  color: #2c3e50;
+  margin-bottom: 2rem;
+  font-weight: 700;
+}
+
+.role-selection {
+  margin-top: 3rem;
+}
+
+.role-selection h2 {
+  font-size: 2rem;
+  color: #34495e;
+  margin-bottom: 2rem;
+}
+
+.role-buttons {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  margin-top: 30px;
+}
+
+.role-button {
+  padding: 15px 40px;
+  font-size: 1.2rem;
+  color: white;
+  background-color: #3498db;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.2s, background-color 0.2s;
+  text-decoration: none;
+  min-width: 200px;
+}
+
+.role-button:hover {
+  background-color: #2980b9;
+  transform: translateY(-2px);
+}
 
 @media (max-width: 768px) {
   .home-container {
