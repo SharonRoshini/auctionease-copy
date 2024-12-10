@@ -1,0 +1,23 @@
+.auction-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    justify-content: center;
+  }
+  
+  .auction-card {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 16px;
+    text-align: center;
+    max-width: 300px;
+  }
+  
+  .auction-card h3 {
+    margin: 0 0 8px;
+  }
+  
+  .auction-card p {
+    margin: 0;
+  }
+  
