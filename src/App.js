@@ -9,8 +9,7 @@ import BuyerDashboard from "./pages/BuyerDashboard";
 import SellerDashboard from "./pages/SellerDashboard";
 import AddAuction from "./pages/AddAuction";
 import UpdateAuction from "./pages/UpdateAuction";
-import BidPage from "./pages/BidPage"; // Add this import
-
+import BidPage from "./pages/BidPage"; 
 import './styles/style.css';
 
 const App = () => {
