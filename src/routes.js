@@ -8,6 +8,7 @@ import UpdateAuction from "./pages/UpdateAuction";
 import AuctionDetails from "./pages/AuctionDetails";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
+import ETLDashboard from "./pages/ETLDashboard";
 
 const AppRoutes = ({ user, setUser }) => (
   <Routes>
@@ -30,7 +31,10 @@ const AppRoutes = ({ user, setUser }) => (
     />
     <Route
       path="/auction/:auctionId"
-      element={user?.role === "BUYER" ? <AuctionDetails userId={user.id} /> : <Navigate to="/login" />}
+      element={user?.role === "BUYER" ? <AuctionDetails user={user} /> :<Navigate to="/login" />}
+    />
+    <Route
+    path="/etl" element={<ETLDashboard/>}
     />
     <Route
       path="/login"

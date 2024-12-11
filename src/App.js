@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route, Navigate, useNavigate } from "react-router-dom";
 import NavbarComponent from "./components/NavbarComponent";
 import Footer from "./components/Footer";
 import Login from "./pages/Login";
@@ -22,6 +22,14 @@ const App = () => {
     localStorage.setItem("user", JSON.stringify(userData)); // Persist in local storage
     console.log("User logged in successfully:", userData); // Debugging
   };
+
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem("user");
+    setUser(null);
+    navigate("/login");
+  };
   
   return (
     <div className="app">
@@ -42,19 +50,19 @@ const App = () => {
           <Route path="/signup" element={<Signup />} />
           <Route 
             path="/buyer-dashboard" 
-            element={loggedIn ? <BuyerDashboard /> : <Navigate to="/login" replace />} 
+            element={user?.role === "BUYER" ? <BuyerDashboard user={user} /> : <Navigate to="/login" />}
           />
           <Route 
             path="/seller-dashboard" 
-            element={loggedIn ? <SellerDashboard /> : <Navigate to="/login" replace />} 
+            element={user?.role === "SELLER" ? <SellerDashboard /> : <Navigate to="/login" />}
           />
-          <Route 
-            path="/add-auction" 
-            element={loggedIn ? <AddAuction /> : <Navigate to="/login" replace />} 
+          <Route
+            path="/add-auction"
+            element={user?.role === "SELLER" ? <AddAuction /> : <Navigate to="/login" />}
           />
-          <Route 
-            path="/update-auction/:id" 
-            element={loggedIn ? <UpdateAuction /> : <Navigate to="/login" replace />} 
+          <Route
+            path="/update-auction/:id"
+            element={user?.role === "SELLER" ? <UpdateAuction /> : <Navigate to="/login" />}
           />
           {/* Add the bid route */}
           <Route 
@@ -63,7 +71,7 @@ const App = () => {
           />
           <Route 
             path="/auction/:auctionId" 
-            element={<AuctionDetails />} 
+            element={user?.role === "BUYER" ? <AuctionDetails user={user}/> : <Navigate to="/login" />}
           />
         </Routes>
       </main>

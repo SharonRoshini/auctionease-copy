@@ -1,17 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import {
-  fetchAuctionById,
-  fetchHighestBid,
-  addBid,
-} from "../services/auctionService";
+import { fetchAuctionById, fetchHighestBid, addBid } from "../services/auctionService";
 
-const AuctionDetails = ({ userId }) => {
+const AuctionDetails = ({ user }) => {
   const { auctionId } = useParams();
   const [auction, setAuction] = useState(null);
   const [highestBid, setHighestBid] = useState(null);
   const [newBidAmount, setNewBidAmount] = useState("");
 
+  // Load auction and highest bid details
   useEffect(() => {
     const loadAuctionDetails = async () => {
       try {
@@ -21,46 +18,37 @@ const AuctionDetails = ({ userId }) => {
         const highestBidData = await fetchHighestBid(auctionId);
         setHighestBid(highestBidData || null);
       } catch (error) {
-        console.error("Error fetching auction details:", error);
+        console.error("Error loading auction details:", error);
       }
     };
 
     loadAuctionDetails();
   }, [auctionId]);
 
+  // Handle adding a new bid
   const handleAddBid = async () => {
-    const enteredBidAmount = parseFloat(newBidAmount);
-
-    if (!enteredBidAmount || enteredBidAmount <= 0) {
-      alert("Please enter a valid bid amount.");
+    if (!newBidAmount || parseFloat(newBidAmount) <= (highestBid?.bidAmount || auction.startingPrice)) {
+      alert("Enter a valid bid amount greater than the highest bid or starting price.");
       return;
     }
-
-    if (highestBid && enteredBidAmount <= highestBid.bidAmount) {
-      alert("Bid amount must be greater than the current highest bid.");
-      return;
-    }
-
-    const payload = {
-      auctionId: parseInt(auctionId), // Ensure auctionId is parsed correctly
-      bidderId: userId,              // Ensure userId is passed from the parent
-      bidAmount: enteredBidAmount,   // Validate user input
-    };
-
-    console.log("Payload being sent to addBid:", payload);
 
     try {
+      const payload = {
+        auctionId: parseInt(auctionId),
+        bidderId: user.auctionUserId, // Pass logged-in user's ID
+        bidAmount: parseFloat(newBidAmount),
+      };
+
       await addBid(payload);
-
       alert("Bid added successfully!");
-      setNewBidAmount("");
+      setNewBidAmount(""); // Reset input field
 
-      // Reload highest bid details
+      // Reload highest bid
       const updatedHighestBid = await fetchHighestBid(auctionId);
       setHighestBid(updatedHighestBid);
     } catch (error) {
       console.error("Error adding bid:", error);
-      alert("Failed to add the bid. Please try again.");
+      alert("Failed to add bid.");
     }
   };
 
@@ -74,15 +62,11 @@ const AuctionDetails = ({ userId }) => {
         <strong>Starting Price:</strong> ${auction.startingPrice}
       </p>
       <p>
-        <strong>Status:</strong>{" "}
-        <span className={auction.status ? "text-success" : "text-danger"}>
-          {auction.status ? "Active" : "Closed"}
-        </span>
+        <strong>Status:</strong> {auction.status ? "Active" : "Closed"}
       </p>
       {highestBid && (
         <p>
-          <strong>Highest Bid:</strong> ${highestBid.bidAmount}{" "}
-          {highestBid.bidderId && <span>(User ID: {highestBid.bidderId})</span>}
+          <strong>Highest Bid:</strong> ${highestBid.bidAmount} (User ID: {highestBid.bidderId})
         </p>
       )}
 
@@ -94,15 +78,8 @@ const AuctionDetails = ({ userId }) => {
             placeholder="Enter your bid amount"
             value={newBidAmount}
             onChange={(e) => setNewBidAmount(e.target.value)}
-            className="form-control mb-2"
           />
-          <button
-            onClick={handleAddBid}
-            className="btn btn-primary"
-            disabled={!auction.status}
-          >
-            Add Bid
-          </button>
+          <button onClick={handleAddBid}>Add Bid</button>
         </div>
       )}
     </div>

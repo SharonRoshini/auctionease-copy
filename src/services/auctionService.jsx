@@ -1,6 +1,5 @@
 import api from './api';
 
-// Auction APIs
 export const fetchAuctions = async () => {
   const response = await api.get('/AuctionEase/auctions');
   return response.data;
@@ -20,9 +19,19 @@ export const createAuction = async (auctionData) => {
   return response.data;
 };
 
+// export const updateAuction = async (auctionId, updatedData) => {
+//   const response = await api.put(`/AuctionEase/auctions/${auctionId}`, updatedData);
+//   return response.data;
+// };
+
 export const updateAuction = async (id, updatedData) => {
-  const response = await api.put(`/AuctionEase/auctions/${id}`, updatedData);
-  return response.data;
+  try {
+    const response = await api.put(`/AuctionEase/auctions/${id}`, updatedData);
+    return response.data;
+  } catch (error) {
+    console.error("Error updating auction:", error);
+    throw error; // Rethrow to handle it in the calling function
+  }
 };
 
 export const deleteAuction = async (id) => {
@@ -38,44 +47,20 @@ export const signupUser = async (userData) => {
 
 export const loginUser = async (credentials) => {
   try {
-    // Fetch all users
     const response = await api.get('/AuctionEase/auctionusers');
     const users = response.data;
 
-    // Find the user by username
     const user = users.find((u) => u.username === credentials.username);
 
-    // Validate password
     if (user && user.password === credentials.password) {
-      return user; // Login successful
-    } else {
+      return user;
+        } else {
       throw new Error("Invalid username or password");
     }
   } catch (error) {
     throw error.response?.data || new Error("Login failed. Please check your credentials.");
   }
 };
-
-// export const loginUser = async (credentials) => {
-//   const response = await api.post('/auctionusers/login', credentials);
-//   return response.data;
-// };
-
-// export const validateLogin = async (username, password) => {
-//   try {
-//     const response = await api.get(`/auctionusers/${username}`); // Fetch user details
-//     const user = response.data;
-
-//     // Simulate password validation (update based on how passwords are stored)
-//     if (user.password === password) {
-//       return user; // Return user if validation succeeds
-//     } else {
-//       throw new Error("Invalid credentials");
-//     }
-//   } catch (error) {
-//     throw error.response?.data || new Error("User not found or validation failed");
-//   }
-// };
 
 export const fetchUsers = async () => {
   const response = await api.get('/AuctionEase/auctionusers');
@@ -99,19 +84,20 @@ export const deleteUser = async (username) => {
 
 // Bid APIs
 export const addBid = async (bidData) => {
+  console.log("Making POST request with payload:", bidData);
   try {
-    console.log("Sending payload to API:", bidData); // Debug
     const response = await api.post('/Auctions/bids', bidData);
     return response.data;
   } catch (error) {
-    console.error("Error in addBid API:", error.response?.data || error.message);
+    console.error("Error in addBid API:", error);
     throw error;
   }
 };
 
+
 export const fetchBidsByAuction = async (auctionId) => {
   const response = await api.get(`/Auctions/bids/auction/${auctionId}`);
-  return response.data;
+  return response.data || [];
 };
 
 export const fetchHighestBid = async (auctionId) => {
@@ -130,8 +116,25 @@ export const performETL = async () => {
   return response.data;
 };
 
-// Kafka API
-export const sendBidUpdates = async (bidUpdateData) => {
-  const response = await api.post('/Auctions/bids/updates', bidUpdateData);
+// // Kafka API
+// export const sendBidUpdates = async (bidUpdateData) => {
+//   const response = await api.post('/Auctions/bids/updates', bidUpdateData);
+//   return response.data;
+// };
+
+// Extract data
+export const extractAuctions = async () => {
+  const response = await api.get('/AuctionEase/auctions');
+  return response.data;
+};
+
+export const extractBidsForAuction = async (auctionId) => {
+  const response = await api.get(`/Auctions/bids/auction/${auctionId}`);
+  return response.data;
+};
+
+// Optional: Load or process data in the backend
+export const loadTransformedData = async (data) => {
+  const response = await api.post('/AuctionEase/etl/load', data);
   return response.data;
 };

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { fetchBidsByAuction, addBid } from "../services/auctionService";
 
-const BidPage = ({ auctionId }) => {
+const BidPage = ({ user, auctionId }) => {
   const [bids, setBids] = useState([]);
   const [bidAmount, setBidAmount] = useState(0);
   const [message, setMessage] = useState("");
@@ -12,7 +12,7 @@ const BidPage = ({ auctionId }) => {
         const data = await fetchBidsByAuction(auctionId);
         setBids(data);
       } catch (error) {
-        console.error("Error fetching bids", error);
+        console.error("Error fetching bids:", error);
       }
     };
 
@@ -21,8 +21,10 @@ const BidPage = ({ auctionId }) => {
 
   const handleBid = async () => {
     try {
-      await addBid({ auctionId, bidAmount });
+      await addBid({ auctionId, bidderId: user.id, bidAmount });
       setMessage("Bid placed successfully!");
+      setBidAmount(0);
+      window.location.reload();
     } catch (error) {
       setMessage("Error placing bid.");
       console.error(error);
@@ -34,10 +36,17 @@ const BidPage = ({ auctionId }) => {
       <h1>Bids for Auction {auctionId}</h1>
       <ul>
         {bids.map((bid) => (
-          <li key={bid.id}>${bid.bidAmount} by User {bid.bidderId}</li>
+          <li key={bid.id}>
+            ${bid.bidAmount} by User {bid.bidderId}
+          </li>
         ))}
       </ul>
-      <input type="number" onChange={(e) => setBidAmount(Number(e.target.value))} placeholder="Enter your bid" />
+      <input
+        type="number"
+        placeholder="Enter Bid Amount"
+        value={bidAmount}
+        onChange={(e) => setBidAmount(Number(e.target.value))}
+      />
       <button onClick={handleBid}>Place Bid</button>
       {message && <p>{message}</p>}
     </div>
