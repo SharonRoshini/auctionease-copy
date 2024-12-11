@@ -1,20 +1,20 @@
 import React, { useState, useEffect } from "react";
-import { getAuctions } from "../services/auctionService";
+import { fetchAuctions } from "../services/auctionService";
 
 const AuctionList = () => {
   const [auctions, setAuctions] = useState([]);
 
   useEffect(() => {
-    const fetchAuctions = async () => {
+    const loadAuctions = async () => {
       try {
-        const data = await getAuctions();
+        const data = await fetchAuctions();
         setAuctions(data);
       } catch (error) {
         console.error("Error fetching auctions", error);
       }
     };
 
-    fetchAuctions();
+    loadAuctions();
   }, []);
 
   return (

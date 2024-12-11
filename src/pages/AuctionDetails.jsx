@@ -1,19 +1,21 @@
-import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import { fetchAuctionDetails } from "../services/auctionService";
+import React, { useState, useEffect } from "react";
+import { fetchAuctionById } from "../services/auctionService";
 
-const AuctionDetails = () => {
-  const { id } = useParams();
+const AuctionDetails = ({ auctionId }) => {
   const [auction, setAuction] = useState(null);
 
   useEffect(() => {
-    const fetchData = async () => {
-      const data = await fetchAuctionDetails(id);
-      setAuction(data);
+    const loadAuction = async () => {
+      try {
+        const data = await fetchAuctionById(auctionId);
+        setAuction(data);
+      } catch (error) {
+        console.error("Error loading auction details", error);
+      }
     };
 
-    fetchData();
-  }, [id]);
+    loadAuction();
+  }, [auctionId]);
 
   if (!auction) return <p>Loading...</p>;
 
@@ -22,10 +24,10 @@ const AuctionDetails = () => {
       <h1>{auction.title}</h1>
       <p>{auction.description}</p>
       <p>Starting Price: ${auction.startingPrice}</p>
-      <p>End Date: {new Date(auction.endDate).toLocaleString()}</p>
+      <p>Start Time: {new Date(auction.startTime).toLocaleString()}</p>
+      <p>End Time: {new Date(auction.endTime).toLocaleString()}</p>
     </div>
   );
 };
 
 export default AuctionDetails;
-

@@ -1,35 +1,48 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-
-const mockSellerAuctions = [
-  { id: 1, title: "Antique Vase", startingPrice: 100 },
-  { id: 2, title: "Vintage Car", startingPrice: 20000 },
-];
+import React, { useState, useEffect } from "react";
+import { fetchAuctions, deleteAuction } from "../services/auctionService";
 
 const SellerDashboard = () => {
-  const [auctions, setAuctions] = useState(mockSellerAuctions);
-  const navigate = useNavigate();
+  const [auctions, setAuctions] = useState([]);
+  const [message, setMessage] = useState("");
 
-  const deleteAuction = (id) => {
-    const updatedAuctions = auctions.filter((auction) => auction.id !== id);
-    setAuctions(updatedAuctions);
-    alert(`Auction with ID ${id} deleted.`);
+  useEffect(() => {
+    const loadSellerAuctions = async () => {
+      try {
+        const data = await fetchAuctions(); // Adjust if seller-specific endpoint exists
+        setAuctions(data);
+      } catch (error) {
+        console.error("Error fetching auctions", error);
+      }
+    };
+
+    loadSellerAuctions();
+  }, []);
+
+  const handleDeleteAuction = async (auctionId) => {
+    try {
+      await deleteAuction(auctionId);
+      setAuctions(auctions.filter((auction) => auction.id !== auctionId));
+      setMessage("Auction deleted successfully!");
+    } catch (error) {
+      setMessage("Error deleting auction.");
+      console.error(error);
+    }
   };
 
   return (
     <div>
-      <h1>Manage Auctions</h1>
-      <button onClick={() => navigate("/add-auction")}>Add Auction</button>
-      <div className="auction-list">
+      <h1>Seller Dashboard</h1>
+      {message && <p>{message}</p>}
+      <ul>
         {auctions.map((auction) => (
-          <div key={auction.id} className="auction-card">
-            <h3>{auction.title}</h3>
-            <p>Starting Price: ${auction.startingPrice}</p>
-            <button onClick={() => navigate(`/update-auction/${auction.id}`)}>Update</button>
-            <button onClick={() => deleteAuction(auction.id)}>Delete</button>
-          </div>
+          <li key={auction.id}>
+            <strong>{auction.title}</strong> - {auction.description}
+            <button onClick={() => handleDeleteAuction(auction.id)}>
+              Delete Auction
+            </button>
+          </li>
         ))}
-      </div>
+      </ul>
     </div>
   );
 };

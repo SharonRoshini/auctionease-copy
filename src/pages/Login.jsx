@@ -1,96 +1,51 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
+import React, { useState } from "react";
+import { loginUser } from "../services/auctionService";
 
-const Login = ({ setLoggedIn, setUserRole }) => {
-  const navigate = useNavigate();
-  const [formData, setFormData] = useState({
-    username: '',
-    password: ''
-  });
-  const [loading, setLoading] = useState(false);
+const Login = ({ onLoginSuccess }) => {
+  const [credentials, setCredentials] = useState({ username: "", password: "" });
+  const [error, setError] = useState("");
 
-  const handleChange = (e) => {
+  const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prevState => ({
-      ...prevState,
-      [name]: value
-    }));
+    setCredentials({ ...credentials, [name]: value });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
-
+    if (typeof onLoginSuccess !== "function") {
+      console.error("onLoginSuccess prop is not a function or is missing!");
+      return;
+    }
     try {
-      // Simulated login for now
-      // In production, this would make an API call
-      if (formData.username && formData.password) {
-        setLoggedIn(true);
-        setUserRole('BUYER'); // or 'SELLER' based on user data
-        localStorage.setItem('isLoggedIn', 'true');
-        toast.success('Login successful!');
-        navigate('/buyer-dashboard');
-      } else {
-        toast.error('Please fill in all fields');
-      }
-    } catch (error) {
-      console.error('Login error:', error);
-      toast.error('Login failed. Please try again.');
-    } finally {
-      setLoading(false);
+      const user = await loginUser(credentials);
+      console.log("Login Successful:", user);
+      onLoginSuccess(user);
+    } catch (err) {
+      setError("Login failed. Please check your credentials.");
+      console.error("Login Error:", err);
     }
   };
 
   return (
-    <div className="auth-container">
-      <h2>Login to AuctionEase</h2>
-      <form onSubmit={handleSubmit} className="auth-form">
-        <div className="form-group">
-          <label htmlFor="username">Username</label>
-          <input
-            type="text"
-            id="username"
-            name="username"
-            value={formData.username}
-            onChange={handleChange}
-            required
-            placeholder="Enter your username"
-          />
-        </div>
-
-        <div className="form-group">
-          <label htmlFor="password">Password</label>
-          <input
-            type="password"
-            id="password"
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
-            required
-            placeholder="Enter your password"
-          />
-        </div>
-
-        <button 
-          type="submit" 
-          disabled={loading}
-        >
-          {loading ? 'Logging in...' : 'Login'}
-        </button>
-
-        <div className="auth-links">
-          <p>
-            Don't have an account?{' '}
-            <span
-              onClick={() => navigate('/signup')}
-              style={{ cursor: 'pointer', color: '#007bff' }}
-            >
-              Sign up
-            </span>
-          </p>
-        </div>
+    <div>
+      <h1>Login</h1>
+      <form onSubmit={handleSubmit}>
+        <input
+          name="username"
+          placeholder="Username"
+          onChange={handleInputChange}
+          required
+        />
+        <input
+          name="password"
+          type="password"
+          placeholder="Password"
+          onChange={handleInputChange}
+          required
+        />
+        <button type="submit">Login</button>
       </form>
+      {error && <p style={{ color: "red" }}>{error}</p>}
     </div>
   );
 };

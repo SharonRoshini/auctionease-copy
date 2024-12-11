@@ -196,7 +196,61 @@ form button {
   margin-bottom: 20px;
 }
 
-.role-selection button {
-  width: 150px;
-  margin: 10px;
+.buyer-dashboard {
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+.auction-cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  cursor: pointer;
+}
+
+.auction-card {
+  border: 1px solid #ccc;
+  padding: 15px;
+  border-radius: 8px;
+  width: 300px;
+  background-color: #f9f9f9;
+  text-align: center;
+}
+
+.auction-card h3 {
+  margin-top: 0;
+  color: #007bff;
+}
+
+.auction-card:hover {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.bid-actions {
+  margin-top: 20px;
+  border-top: 1px solid #ccc;
+  padding-top: 20px;
+}
+
+.add-bid-section input {
+  margin-right: 10px;
+}
+
+button {
+  padding: 10px;
+  margin: 5px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+.message {
+  margin-top: 10px;
+  color: green;
 }

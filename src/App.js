@@ -14,8 +14,13 @@ import './styles/style.css';
 
 const App = () => {
   const [loggedIn, setLoggedIn] = useState(false);
-  const [userRole, setUserRole] = useState(null);
-
+  const [user, setUser] = useState(null);
+  
+  const handleLoginSuccess = (userData) => {
+    setUser(userData); // Save user data to state
+    localStorage.setItem("user", JSON.stringify(userData)); // Persist in local storage
+    console.log("User logged in successfully:", userData); // Debugging
+  };
   return (
     <div className="app">
       <NavbarComponent loggedIn={loggedIn} setLoggedIn={setLoggedIn} />
@@ -24,7 +29,13 @@ const App = () => {
           <Route path="/" element={<Home loggedIn={loggedIn} />} />
           <Route 
             path="/login" 
-            element={<Login setLoggedIn={setLoggedIn} setUserRole={setUserRole} />} 
+            element={!user ? (
+              <Login onLoginSuccess={handleLoginSuccess} />
+            ) : user.role === "BUYER" ? (
+              <BuyerDashboard />
+            ) : (
+              <SellerDashboard />
+            )}
           />
           <Route path="/signup" element={<Signup />} />
           <Route 
