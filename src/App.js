@@ -10,6 +10,7 @@ import SellerDashboard from "./pages/SellerDashboard";
 import AddAuction from "./pages/AddAuction";
 import UpdateAuction from "./pages/UpdateAuction";
 import BidPage from "./pages/BidPage"; 
+// import AuctionDetails from "./pages/AuctionDetails";
 import './styles/style.css';
 
 const App = () => {
