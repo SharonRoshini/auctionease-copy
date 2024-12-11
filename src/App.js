@@ -10,7 +10,7 @@ import SellerDashboard from "./pages/SellerDashboard";
 import AddAuction from "./pages/AddAuction";
 import UpdateAuction from "./pages/UpdateAuction";
 import BidPage from "./pages/BidPage"; 
-// import AuctionDetails from "./pages/AuctionDetails";
+import AuctionDetails from "./pages/AuctionDetails";
 import './styles/style.css';
 
 const App = () => {
@@ -22,6 +22,7 @@ const App = () => {
     localStorage.setItem("user", JSON.stringify(userData)); // Persist in local storage
     console.log("User logged in successfully:", userData); // Debugging
   };
+  
   return (
     <div className="app">
       <NavbarComponent loggedIn={loggedIn} setLoggedIn={setLoggedIn} />
@@ -59,6 +60,10 @@ const App = () => {
           <Route 
             path="/bid/:id" 
             element={<BidPage />} 
+          />
+          <Route 
+            path="/auction/:auctionId" 
+            element={<AuctionDetails />} 
           />
         </Routes>
       </main>

@@ -99,8 +99,14 @@ export const deleteUser = async (username) => {
 
 // Bid APIs
 export const addBid = async (bidData) => {
-  const response = await api.post('/Auctions/bids', bidData);
-  return response.data;
+  try {
+    console.log("Sending payload to API:", bidData); // Debug
+    const response = await api.post('/Auctions/bids', bidData);
+    return response.data;
+  } catch (error) {
+    console.error("Error in addBid API:", error.response?.data || error.message);
+    throw error;
+  }
 };
 
 export const fetchBidsByAuction = async (auctionId) => {

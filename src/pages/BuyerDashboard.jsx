@@ -110,13 +110,9 @@ const BuyerDashboard = () => {
                       </span>
                     </p>
                   </div>
-                  <button
-                    className="btn btn-primary w-100"
-                    onClick={() => navigate(`/auction/${auction.auctionId}`)}
-                    disabled={!auction.status}
-                  >
-                    {auction.status ? "View Details" : "Auction Closed"}
-                  </button>
+                  <button className="btn btn-primary w-100"
+                  onClick={() => navigate(`/auction/${auction.auctionId}`)}>
+                  View Details </button>
                 </div>
               </div>
             </div>
