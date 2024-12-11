@@ -7,7 +7,11 @@ export const fetchAuctions = async () => {
 };
 
 export const fetchAuctionById = async (id) => {
-  const response = await api.get(`/AuctionEase/auctions/${auctionId}`);
+  const response = await api.get(`/AuctionEase/auctions/${id}`);
+  return response.data;
+};
+export const fetchAuctionByTitle = async (title) => {
+  const response = await api.get(`/AuctionEase/auctions/title/${title}`);
   return response.data;
 };
 
