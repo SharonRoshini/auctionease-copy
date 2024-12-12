@@ -349,3 +349,51 @@ form button {
   padding: 10px 0;
   margin-top: auto;
 }
+.etl-dashboard {
+  max-width: 800px;
+  margin: 50px auto;
+  text-align: center;
+}
+
+.etl-dashboard button {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.etl-dashboard button:disabled {
+  background-color: #6c757d;
+  cursor: not-allowed;
+}
+
+.bids-list {
+  margin-top: 20px;
+}
+
+.bids-list table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.bids-list th, .bids-list td {
+  border: 1px solid #ccc;
+  padding: 10px;
+  text-align: center;
+}
+
+.bids-list th {
+  background-color: #f8f9fa;
+}
+
+.bids-list td {
+  background-color: #fff;
+}
+
+.error {
+  color: red;
+  margin-top: 10px;
+}

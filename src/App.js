@@ -113,14 +113,8 @@ const App = () => {
           />
 
           {/* Admin Routes */}
-          <Route 
-            path="/etl" 
-            element={user?.role === "ADMIN" ? (
-              <ETLDashboard />
-            ) : (
-              <Navigate to="/login" />
-            )}
-          />
+          <Route path="/etl-dashboard" element={<ETLDashboard />} />
+
 
           {/* Catch-all Route */}
           <Route path="*" element={<Navigate to="/" />} />

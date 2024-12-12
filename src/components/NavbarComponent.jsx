@@ -10,12 +10,10 @@ const NavbarComponent = ({ user, onLogout }) => {
       <div className="navbar-links">
         <Link to="/login">Login</Link>
         <Link to="/signup">Signup</Link>
-        <Link to="/etl">Add Bid ETL</Link>
-        {user && (
-          <button onClick={onLogout} className="btn-logout">
+        <Link to="/etl-dashboard">Add Bid ETL</Link>
+        <button onClick={onLogout} className="btn-logout">
             Logout
           </button>
-        )}
       </div>
     </nav>
   );
