@@ -4,6 +4,7 @@ import {
   createAuction,
   deleteAuction,
   updateAuction,
+  fetchBidsByAuction,
 } from "../services/auctionService";
 import Modal from "react-modal";
 
@@ -11,6 +12,7 @@ Modal.setAppElement("#root");
 
 const SellerDashboard = () => {
   const [auctions, setAuctions] = useState([]);
+  const [bids, setBids] = useState({}); // State to hold bids for each auction
   const [newAuction, setNewAuction] = useState({
     title: "",
     description: "",
@@ -29,6 +31,20 @@ const SellerDashboard = () => {
       try {
         const data = await fetchAuctions();
         setAuctions(data);
+
+        // Fetch bids for each auction
+        data.forEach((auction) => {
+          fetchBidsByAuction(auction.auctionId)
+            .then((bidData) => {
+              setBids((prevBids) => ({
+                ...prevBids,
+                [auction.auctionId]: bidData,
+              }));
+            })
+            .catch((error) => {
+              console.error(`Error fetching bids for auction ${auction.auctionId}:`, error);
+            });
+        });
       } catch (error) {
         console.error("Error fetching auctions:", error);
       }
@@ -115,6 +131,23 @@ const SellerDashboard = () => {
             <p>
               <strong>End Time:</strong> {new Date(auction.endTime).toLocaleString()}
             </p>
+
+            {/* Display Bids */}
+            <div className="bids-section">
+              <h4>Bids:</h4>
+              {bids[auction.auctionId] && bids[auction.auctionId].length > 0 ? (
+                <ul>
+                  {bids[auction.auctionId].map((bid) => (
+                    <li key={bid.bidId}>
+                      Bid Amount: ${bid.bidAmount} - Bidder ID: {bid.bidderId}
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p>No bids placed yet.</p>
+              )}
+            </div>
+
             <button onClick={() => openEditModal(auction)}>Edit</button>
             <button onClick={() => handleDeleteAuction(auction.auctionId)}>Delete</button>
           </div>

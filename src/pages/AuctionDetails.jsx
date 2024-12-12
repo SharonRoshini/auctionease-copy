@@ -55,33 +55,38 @@ const AuctionDetails = ({ user }) => {
   if (!auction) return <p>Loading auction details...</p>;
 
   return (
-    <div className="container mt-4">
-      <h1>{auction.title}</h1>
-      <p>{auction.description}</p>
-      <p>
-        <strong>Starting Price:</strong> ${auction.startingPrice}
-      </p>
-      <p>
-        <strong>Status:</strong> {auction.status ? "Active" : "Closed"}
-      </p>
-      {highestBid && (
+    <div className="auction-details-page">
+      <div className="auction-details-container">
+        <h1 className="auction-title">{auction.title}</h1>
+        <p className="auction-description">{auction.description}</p>
         <p>
-          <strong>Highest Bid:</strong> ${highestBid.bidAmount} (User ID: {highestBid.bidderId})
+          <strong>Starting Price:</strong> ${auction.startingPrice}
         </p>
-      )}
+        <p>
+          <strong>Status:</strong> {auction.status ? "Active" : "Closed"}
+        </p>
+        {highestBid && (
+          <p>
+            <strong>Highest Bid:</strong> ${highestBid.bidAmount}
+          </p>
+        )}
 
-      {auction.status && (
-        <div>
-          <h3>Place Your Bid</h3>
-          <input
-            type="number"
-            placeholder="Enter your bid amount"
-            value={newBidAmount}
-            onChange={(e) => setNewBidAmount(e.target.value)}
-          />
-          <button onClick={handleAddBid}>Add Bid</button>
-        </div>
-      )}
+        {auction.status && (
+          <div className="bid-section">
+            <h3>Place Your Bid</h3>
+            <input
+              type="number"
+              className="bid-input"
+              placeholder="Enter your bid amount"
+              value={newBidAmount}
+              onChange={(e) => setNewBidAmount(e.target.value)}
+            />
+            <button className="bid-button" onClick={handleAddBid}>
+              Add Bid
+            </button>
+          </div>
+        )}
+      </div>
     </div>
   );
 };

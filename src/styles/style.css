@@ -282,3 +282,70 @@ form button {
 .btn-logout:hover {
   background-color: #c82333;
 }
+/* AuctionDetails Page Styles */
+.auction-details-page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.auction-details-container {
+  flex: 1;
+  max-width: 800px;
+  margin: auto;
+  padding: 20px;
+  background-color: #ffffff;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.auction-title {
+  font-size: 2.5rem;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.auction-description {
+  font-size: 1.2rem;
+  color: #555;
+  margin-bottom: 20px;
+  line-height: 1.6;
+}
+
+.bid-section {
+  margin-top: 20px;
+}
+
+.bid-input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.bid-button {
+  width: 100%;
+  padding: 10px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.bid-button:hover {
+  background-color: #0056b3;
+}
+
+/* Footer Styles */
+.auction-footer {
+  background-color: #212529;
+  color: #ffffff;
+  text-align: center;
+  padding: 10px 0;
+  margin-top: auto;
+}
