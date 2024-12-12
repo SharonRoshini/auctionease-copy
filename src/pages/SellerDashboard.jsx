@@ -38,17 +38,12 @@ const SellerDashboard = () => {
 
   // Handle Add Auction
   const handleAddAuction = async () => {
-    if (!newAuction.title || !newAuction.startingPrice || !newAuction.startTime || !newAuction.endTime) {
-      setMessage("Please fill out all fields.");
-      return;
-    }
     try {
       await createAuction(newAuction);
       setMessage("Auction added successfully!");
       setIsAddModalOpen(false);
-      setNewAuction({ title: "", description: "", startingPrice: 0, startTime: "", endTime: "" });
       const data = await fetchAuctions();
-      setAuctions(data);
+      setAuctions(data); // Reload auctions
     } catch (error) {
       setMessage("Failed to add auction.");
       console.error("Error adding auction:", error);
@@ -57,15 +52,11 @@ const SellerDashboard = () => {
 
   // Handle Delete Auction
   const handleDeleteAuction = async (auctionId) => {
-    if (!auctionId) {
-      setMessage("Invalid auction ID.");
-      return;
-    }
     try {
       await deleteAuction(auctionId);
       setMessage("Auction deleted successfully!");
       const data = await fetchAuctions();
-      setAuctions(data);
+      setAuctions(data); // Reload auctions
     } catch (error) {
       setMessage("Error deleting auction.");
       console.error("Error deleting auction:", error);
@@ -78,34 +69,30 @@ const SellerDashboard = () => {
       setMessage("Error: Auction ID is missing.");
       return;
     }
+
     const payload = {
-      ...selectedAuction,
-      startTime: new Date(selectedAuction.startTime).toISOString(),
-      endTime: new Date(selectedAuction.endTime).toISOString(),
+      title: selectedAuction.title,
+      description: selectedAuction.description,
+      status: true, // Assuming "true" for active status; adjust as needed
     };
-  
-    console.log("Updating Auction with Data:", selectedAuction);
-  
+
     try {
-      await updateAuction(selectedAuction.auctionId, selectedAuction);
+      await updateAuction(selectedAuction.auctionId, payload);
       setMessage("Auction updated successfully!");
       setIsEditModalOpen(false);
+
+      // Reload auctions after update
       const data = await fetchAuctions();
       setAuctions(data);
     } catch (error) {
-      console.error("Error updating auction:", error.response?.data || error.message);
       setMessage("Failed to update auction.");
+      console.error("Error updating auction:", error);
     }
   };
 
-  // Open Edit Modal
+  // Open edit modal and populate auction data
   const openEditModal = (auction) => {
-    if (!auction.auctionId) {
-      console.error("Auction ID is missing:", auction);
-      setMessage("Invalid auction selected.");
-      return;
-    }
-    setSelectedAuction({ ...auction });
+    setSelectedAuction({ ...auction, status: true });
     setIsEditModalOpen(true);
   };
 
@@ -141,32 +128,27 @@ const SellerDashboard = () => {
           <input
             name="title"
             placeholder="Title"
-            value={newAuction.title}
             onChange={(e) => setNewAuction({ ...newAuction, title: e.target.value })}
           />
           <textarea
             name="description"
             placeholder="Description"
-            value={newAuction.description}
             onChange={(e) => setNewAuction({ ...newAuction, description: e.target.value })}
           />
           <input
             name="startingPrice"
             type="number"
             placeholder="Starting Price"
-            value={newAuction.startingPrice}
-            onChange={(e) => setNewAuction({ ...newAuction, startingPrice: parseFloat(e.target.value) })}
+            onChange={(e) => setNewAuction({ ...newAuction, startingPrice: e.target.value })}
           />
           <input
             name="startTime"
             type="datetime-local"
-            value={newAuction.startTime}
             onChange={(e) => setNewAuction({ ...newAuction, startTime: e.target.value })}
           />
           <input
             name="endTime"
             type="datetime-local"
-            value={newAuction.endTime}
             onChange={(e) => setNewAuction({ ...newAuction, endTime: e.target.value })}
           />
           <button type="button" onClick={handleAddAuction}>
@@ -194,31 +176,6 @@ const SellerDashboard = () => {
               placeholder="Description"
               onChange={(e) =>
                 setSelectedAuction({ ...selectedAuction, description: e.target.value })
-              }
-            />
-            <input
-              name="startingPrice"
-              type="number"
-              value={selectedAuction.startingPrice}
-              placeholder="Starting Price"
-              onChange={(e) =>
-                setSelectedAuction({ ...selectedAuction, startingPrice: parseFloat(e.target.value) })
-              }
-            />
-            <input
-              name="startTime"
-              type="datetime-local"
-              value={new Date(selectedAuction.startTime).toISOString().slice(0, 16)}
-              onChange={(e) =>
-                setSelectedAuction({ ...selectedAuction, startTime: e.target.value })
-              }
-            />
-            <input
-              name="endTime"
-              type="datetime-local"
-              value={new Date(selectedAuction.endTime).toISOString().slice(0, 16)}
-              onChange={(e) =>
-                setSelectedAuction({ ...selectedAuction, endTime: e.target.value })
               }
             />
             <button type="button" onClick={handleUpdateAuction}>

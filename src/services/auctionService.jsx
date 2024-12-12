@@ -19,19 +19,9 @@ export const createAuction = async (auctionData) => {
   return response.data;
 };
 
-// export const updateAuction = async (auctionId, updatedData) => {
-//   const response = await api.put(`/AuctionEase/auctions/${auctionId}`, updatedData);
-//   return response.data;
-// };
-
-export const updateAuction = async (id, updatedData) => {
-  try {
-    const response = await api.put(`/AuctionEase/auctions/${id}`, updatedData);
-    return response.data;
-  } catch (error) {
-    console.error("Error updating auction:", error);
-    throw error; // Rethrow to handle it in the calling function
-  }
+export const updateAuction = async (auctionId, updatedData) => {
+  const response = await api.put(`/AuctionEase/auctions/${auctionId}`, updatedData);
+  return response.data;
 };
 
 export const deleteAuction = async (id) => {
