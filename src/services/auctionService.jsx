@@ -100,19 +100,10 @@ export const deleteBid = async (bidId) => {
   return response.data;
 };
 
-// ETL Pipeline API
 export const performETL = async () => {
   const response = await api.get('/AuctionEase/auctions/etl');
   return response.data;
 };
-
-// // Kafka API
-// export const sendBidUpdates = async (bidUpdateData) => {
-//   const response = await api.post('/Auctions/bids/updates', bidUpdateData);
-//   return response.data;
-// };
-
-// Extract data
 export const extractAuctions = async () => {
   const response = await api.get('/AuctionEase/auctions');
   return response.data;
