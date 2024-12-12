@@ -4,33 +4,41 @@ import axios from "axios";
 const ETLDashboard = () => {
   const [bids, setBids] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
 
-  const handleRunETL = async () => {
-    setLoading(true);
-    setError(null);
-
+  // Function to trigger the ETL pipeline
+  const runETLPipeline = async () => {
+    setLoading(true); // Show a loading indicator
     try {
+      // Call the ETL endpoint
       const response = await axios.get("http://localhost:8080/AuctionEase/auctions/etl");
-      setBids(response.data);
-    } catch (err) {
-      setError("Failed to execute ETL pipeline. Please try again.");
-      console.error("ETL Error:", err);
+
+      // Check if data is returned
+      if (response.data && Array.isArray(response.data)) {
+        setBids(response.data); // Update state with the new bids
+      } else {
+        alert("No data returned from ETL pipeline.");
+      }
+    } catch (error) {
+      console.error("Error running ETL pipeline:", error);
+      alert("Failed to run ETL pipeline. Please try again later.");
     } finally {
-      setLoading(false);
+      setLoading(false); // Hide loading indicator
     }
   };
 
   return (
-    <div className="etl-dashboard">
-      <h1>ETL Pipeline Dashboard</h1>
-      <button onClick={handleRunETL} disabled={loading}>
-        {loading ? "Running ETL..." : "Run ETL Pipeline"}
-      </button>
-      {error && <p className="error">{error}</p>}
-      <div className="bids-list">
-        {bids.length > 0 ? (
-          <table>
+    <div className="container mt-4">
+      <h1 className="text-center">ETL Pipeline Dashboard</h1>
+      <div className="text-center">
+        <button className="btn btn-primary" onClick={runETLPipeline} disabled={loading}>
+          {loading ? "Running ETL Pipeline..." : "Run ETL Pipeline"}
+        </button>
+      </div>
+
+      {/* Table to display bid data */}
+      {bids.length > 0 && (
+        <div className="table-responsive mt-4">
+          <table className="table table-bordered">
             <thead>
               <tr>
                 <th>Bid ID</th>
@@ -42,16 +50,19 @@ const ETLDashboard = () => {
               {bids.map((bid) => (
                 <tr key={bid.bidId}>
                   <td>{bid.bidId}</td>
-                  <td>${bid.bidAmount}</td>
+                  <td>${bid.bidAmount.toFixed(2)}</td>
                   <td>{bid.createdAt}</td>
                 </tr>
               ))}
             </tbody>
           </table>
-        ) : (
-          <p>No data retrieved. Run the ETL pipeline to load data.</p>
-        )}
-      </div>
+        </div>
+      )}
+
+      {/* Message when no data is available */}
+      {bids.length === 0 && !loading && (
+        <p className="text-center mt-4">No data available. Click "Run ETL Pipeline" to fetch data.</p>
+      )}
     </div>
   );
 };
