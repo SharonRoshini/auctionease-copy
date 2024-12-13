@@ -139,7 +139,7 @@ const SellerDashboard = () => {
                 <ul>
                   {bids[auction.auctionId].map((bid) => (
                     <li key={bid.bidId}>
-                      Bid Amount: ${bid.bidAmount} - Bidder ID: {bid.bidderId}
+                      Bid Amount: ${bid.bidAmount}
                     </li>
                   ))}
                 </ul>

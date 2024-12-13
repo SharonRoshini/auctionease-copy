@@ -114,7 +114,6 @@ export const extractBidsForAuction = async (auctionId) => {
   return response.data;
 };
 
-// Optional: Load or process data in the backend
 export const loadTransformedData = async (data) => {
   const response = await api.post('/AuctionEase/etl/load', data);
   return response.data;
