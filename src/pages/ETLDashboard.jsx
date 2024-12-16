@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import axios from "axios";
+import api from "../services/api";
 
 const ETLDashboard = () => {
   const [bids, setBids] = useState([]);
@@ -9,10 +9,8 @@ const ETLDashboard = () => {
   const runETLPipeline = async () => {
     setLoading(true); // Show a loading indicator
     try {
-      // Call the ETL endpoint
-      const response = await axios.get("http://localhost:8080/AuctionEase/auctions/etl");
+      const response = await api.get("/AuctionEase/auctions/etl");
 
-      // Check if data is returned
       if (response.data && Array.isArray(response.data)) {
         setBids(response.data); // Update state with the new bids
       } else {
@@ -22,7 +20,7 @@ const ETLDashboard = () => {
       console.error("Error running ETL pipeline:", error);
       alert("Failed to run ETL pipeline. Please try again later.");
     } finally {
-      setLoading(false); // Hide loading indicator
+      setLoading(false); 
     }
   };
 
